@@ -175,11 +175,65 @@ def firstPart():
     c = count_tails(grid)
     print(c)
 
+# iteratively we need to move head forward and check if tail is still in touch or needs to be moved
+def move_head_tails_9(move_x, move_y, knots, grid):
+    # move right
+    if move_x > 0:
+        for y in range(move_x):
+            knots[0][0] += 1
+            for i in range(len(knots) - 1):
+                if not check_tails_touches(knots[i+1], knots[i]):
+                    knots[i+1] = move_tails(knots[i+1], knots[i], 'R')
+                if i == len(knots) - 2:
+                    grid = mark_position_in_grid(grid, knots[i+1])
+    # move left
+    elif move_x < 0:
+        for y in range(abs(move_x)):
+            knots[0][0] -= 1
+            for i in range(len(knots) - 1):
+                if not check_tails_touches(knots[i+1], knots[i]):
+                    tail = move_tails(knots[i+1], knots[i], 'L')
+                if i == len(knots) - 2:
+                    grid = mark_position_in_grid(grid, knots[i+1])
+    # move up
+    elif move_y > 0:
+        for y in range(move_y):
+            knots[0][1] += 1
+            for i in range(len(knots) - 1):
+                if not check_tails_touches(knots[i+1], knots[i]):
+                    tail = move_tails(knots[i+1], knots[i], 'U')
+                if i == len(knots) - 2:
+                    grid = mark_position_in_grid(grid, knots[i+1])
+    # move down
+    elif move_y < 0:
+        for y in range(abs(move_y)):
+            knots[0][1] -= 1
+            for i in range(len(knots) - 1):
+                if not check_tails_touches(knots[i+1], knots[i]):
+                    tail = move_tails(knots[i+1], knots[i], 'D')
+            if i == len(knots) - 2:
+                grid = mark_position_in_grid(grid, knots[i+1])
+    return grid, knots[i], knots[i+1]
+
+
 def secondPart():
-    stacks = readFile()
+    rows, cols = (40, 40)
+    grid = [['.' for i in range(cols)] for j in range(rows)]
+    move_instructions = readFile()
+    knot_count = 10
+    knots = [[20, 20] for i in range(knot_count)]
+
+    for cord in move_instructions:
+        grid, head, tail = move_head_tails_9(cord[0], cord[1], knots, grid)
+
+    for s in grid:
+        print(str(s) + '\n')
+
+    c = count_tails(grid)
+    print(c)
 
 
 
 if __name__ == '__main__':
-    firstPart()
-    #secondPart()
+    #firstPart()
+    secondPart()
