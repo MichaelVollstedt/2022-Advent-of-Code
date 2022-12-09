@@ -136,10 +136,6 @@ def secondPart():
     max_score = max_val[-1]
     print('max tree score = ' + str(max_score))
 
-
-
-
-
 if __name__ == '__main__':
     #firstPart()
     secondPart()
